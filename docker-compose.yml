@@ -1,0 +1,16 @@
+# Tu host backend tren VPS (DigitalOcean/EC2/...). Chay: docker compose up -d --build
+# Frontend nen deploy rieng tren Vercel/Netlify (static). DB dung Supabase cloud.
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: autograde-backend
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    env_file:
+      - ./backend/.env        # tao tu backend/.env.example roi dien gia tri
+    # Gioi han tai nguyen (bao ve khi chay code sinh vien). Can Docker Compose v2.
+    mem_limit: 1g
+    cpus: "1.0"

@@ -1,0 +1,11 @@
+# Bi mat & phu thuoc — KHONG day len GitHub
+**/.env
+**/.env.local
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+*.tsbuildinfo
+**/uploads/*
+!**/uploads/.gitkeep
+.DS_Store

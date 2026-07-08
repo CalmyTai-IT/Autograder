@@ -1,0 +1,65 @@
+# Render Blueprint — deploy backend AutoGrade bang Docker.
+# Cach dung: day repo len GitHub -> Render -> New -> Blueprint -> chon repo.
+# Sau do dien cac bien "sync: false" (bi mat) trong tab Environment.
+services:
+  - type: web
+    name: autograde-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      # ── Bat buoc / bi mat (tu dien tren dashboard) ──
+      - key: APP_URL                      # URL frontend (Vercel); tam de http://localhost:5173
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+
+      # ── JWT ──
+      - key: JWT_SECRET
+        generateValue: true               # Render tu sinh chuoi ngau nhien
+      - key: JWT_EXPIRES_IN
+        value: 7d
+
+      # ── Model LLM & timeout ──
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+      - key: GROQ_MODEL
+        value: openai/gpt-oss-120b
+      - key: LLM_TIMEOUT_MS
+        value: "30000"
+
+      # ── Luu tru file (Supabase Storage) ──
+      - key: STORAGE_BUCKET
+        value: uploads
+      - key: UPLOAD_DIR
+        value: uploads
+
+      # ── Sandbox chay code sinh vien ──
+      - key: SANDBOX_TIMEOUT_MS
+        value: "5000"
+      - key: SANDBOX_COMPILE_TIMEOUT_MS
+        value: "15000"
+      - key: SANDBOX_MEMORY_MB
+        value: "256"
+      - key: SANDBOX_MAX_OUTPUT
+        value: "1000000"
+
+      # ── SMTP gui email (de trong 3 bien sync:false -> chay che do DEV, in ma ra Logs) ──
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: SMTP_FROM
+        value: AutoGrade <no-reply@autograde.local>
