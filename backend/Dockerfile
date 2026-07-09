@@ -1,4 +1,4 @@
-FROM node:20-bookworm
+FROM node:22-bookworm
 
 # Toolchain để chấm code sinh viên: python3 (Python), g++ (C++), JDK (Java)
 RUN apt-get update && apt-get install -y --no-install-recommends \
