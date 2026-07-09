@@ -62,7 +62,7 @@ async function groqComment(a: {
           body: JSON.stringify({
             model: config.groq.model,
             temperature: 0.5,
-            max_tokens: 200,
+            max_tokens: 1024,
             messages: [
               { role: "system", content: system },
               { role: "user", content: `Dữ kiện chấm bài:\n${facts}\n\nViết nhận xét theo yêu cầu trên.` },

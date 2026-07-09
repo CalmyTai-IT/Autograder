@@ -1,24 +1,39 @@
-import nodemailer from "nodemailer";
 import { config } from "../config";
 
-// Nếu chưa cấu hình SMTP → chế độ DEV: in link ra console (không gửi mail thật).
-const enabled = Boolean(config.smtp.host && config.smtp.user);
+// Nếu chưa cấu hình Brevo API key → chế độ DEV: in link ra console (không gửi mail thật).
+const enabled = Boolean(config.brevo.apiKey);
 
-const transporter = enabled
-  ? nodemailer.createTransport({
-      host: config.smtp.host,
-      port: config.smtp.port,
-      secure: config.smtp.port === 465,
-      auth: { user: config.smtp.user, pass: config.smtp.pass },
-    })
-  : null;
+// Brevo yêu cầu sender là { email, name } riêng biệt, trong khi config.smtp.from
+// thường ở dạng "Tên <email@domain.com>" → tách ra cho đúng định dạng.
+function parseFrom(from: string): { email: string; name?: string } {
+  const m = from.match(/^"?([^"<]*)"?\s*<([^>]+)>$/);
+  if (m) return { name: m[1].trim() || undefined, email: m[2].trim() };
+  return { email: from.trim() };
+}
 
 async function send(to: string, subject: string, html: string, devLink: string) {
-  if (!transporter) {
+  if (!enabled) {
     console.log(`\n[email:DEV] Tới: ${to}\n[email:DEV] ${subject}\n[email:DEV] Link: ${devLink}\n`);
     return;
   }
-  await transporter.sendMail({ from: config.smtp.from, to, subject, html });
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": config.brevo.apiKey,
+      "Content-Type": "application/json",
+      accept: "application/json",
+    },
+    body: JSON.stringify({
+      sender: parseFrom(config.smtp.from),
+      to: [{ email: to }],
+      subject,
+      htmlContent: html,
+    }),
+  });
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`Brevo API lỗi (${res.status}): ${body}`);
+  }
 }
 
 export async function sendVerificationEmail(to: string, code: string) {

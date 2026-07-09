@@ -19,6 +19,9 @@ export const config = {
     pass: process.env.SMTP_PASS ?? "",
     from: process.env.SMTP_FROM ?? "AutoGrade <no-reply@autograde.local>",
   },
+  brevo: {
+    apiKey: process.env.BREVO_API_KEY ?? "",
+  },
 
   // (giữ lại cho tương thích cũ — không bắt buộc dùng nữa)
   gradingApiKey: process.env.GRADING_API_KEY ?? "",
