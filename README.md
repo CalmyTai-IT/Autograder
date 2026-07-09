@@ -58,6 +58,7 @@ Hỗ trợ **Python, C++, Java**. Toàn bộ giao diện và nhận xét bằng 
 ```
 autograde/
 ├── README.md               # Tài liệu này
+├── HUONG_DAN_CHAM_DIEM.md
 ├── docs/                   # ★ Toàn bộ tài liệu đồ án (xem docs/README.md)
 │   ├── AutoGrade_Vision_Document.pdf
 │   ├── AutoGrade_UseCase_Specification.pdf
@@ -65,7 +66,6 @@ autograde/
 │   ├── AutoGrade_KienTruc.pdf
 │   ├── AutoGrade_NonFunctional_Requirements.pdf
 │   ├── Model_Evaluation_AutoGrade.pdf
-│   └── HUONG_DAN_CHAM_DIEM.md
 ├── backend/                # Node.js + Express + TypeScript (API, auth, grading engine)
 │   ├── src/
 │   │   ├── routes/         # REST endpoints
@@ -139,7 +139,7 @@ Gian lận (chỉ bài tập lớp)
 
 Bài tự luyện dùng chung pipeline nhưng **bỏ qua bước gian lận**.
 
-📖 Chi tiết cách cài, đổi model, prompt: [`docs/HUONG_DAN_CHAM_DIEM.md`](docs/HUONG_DAN_CHAM_DIEM.md)
+📖 Chi tiết cách cài, đổi model, prompt: [`HUONG_DAN_CHAM_DIEM.md`](docs/HUONG_DAN_CHAM_DIEM.md)
 
 ---
 
@@ -264,7 +264,7 @@ Toàn bộ tài liệu đồ án nằm trong thư mục [`docs/`](docs/) — xem
 | [Báo cáo Kiến trúc tổng thể](docs/AutoGrade_KienTruc.pdf) | 4 phân hệ, luồng chấm A/B, luồng dữ liệu, công nghệ |
 | [Non-Functional Requirements](docs/AutoGrade_NonFunctional_Requirements.pdf) | 26 NFR theo ISO/IEC 25010, kèm bằng chứng trong mã nguồn |
 | [Model Evaluation](docs/Model_Evaluation_AutoGrade.pdf) | Thiết kế thí nghiệm, độ đo, kết quả, hạn chế |
-| [Hướng dẫn mô-đun chấm điểm](docs/HUONG_DAN_CHAM_DIEM.md) | Cách cài, đổi model/API, prompt của 5 mô-đun |
+| [Hướng dẫn mô-đun chấm điểm](HUONG_DAN_CHAM_DIEM.md) | Cách cài, đổi model/API, prompt của 5 mô-đun |
 
 ---
 
