@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { EmptyState } from "@/components/ui/empty-state";
+import { Markdown } from "@/components/ui/markdown";
 import { CheckCircle2, Code2, FileText, Loader2, Lock, Maximize2, PencilLine, Play } from "lucide-react";
 import type { Submission } from "@/types";
 
@@ -146,9 +147,20 @@ export function GradeAssignmentPage() {
                           </TableCell>
                           <TableCell>
                             <div className="flex items-start gap-1">
-                              <Textarea value={d.comment} disabled={locked}
-                                onChange={(e) => setDraft(s.id, { comment: e.target.value })}
-                                onBlur={() => void commit(s)} className="min-h-9 py-1.5 text-xs" rows={2} />
+                              <button
+                                type="button"
+                                onClick={() => setCommentOf(s)}
+                                title={locked ? "Xem nhận xét" : "Xem / sửa nhận xét"}
+                                className="min-h-9 w-full rounded-md border bg-background px-2 py-1.5 text-left text-xs hover:bg-muted/50"
+                              >
+                                {d.comment.trim() ? (
+                                  <div className="max-h-16 overflow-hidden">
+                                    <Markdown content={d.comment} className="text-xs [&_p]:my-1 [&_ol]:my-1 [&_ul]:my-1" />
+                                  </div>
+                                ) : (
+                                  <span className="text-muted-foreground">Chưa có nhận xét</span>
+                                )}
+                              </button>
                               <Button variant="ghost" size="icon" className="size-8 shrink-0 text-muted-foreground" title="Mở rộng nhận xét" onClick={() => setCommentOf(s)}>
                                 <Maximize2 />
                               </Button>
@@ -216,13 +228,30 @@ export function GradeAssignmentPage() {
             <DialogDescription className="data">{commentOf?.studentCode}</DialogDescription>
           </DialogHeader>
           {commentOf && (
-            <Textarea
-              value={draftOf(commentOf).comment}
-              disabled={locked}
-              onChange={(e) => setDraft(commentOf.id, { comment: e.target.value })}
-              className="min-h-72 text-sm leading-relaxed"
-              placeholder="Nhận xét cho sinh viên…"
-            />
+            <Tabs defaultValue="preview">
+              <TabsList>
+                <TabsTrigger value="preview">Xem</TabsTrigger>
+                <TabsTrigger value="edit" disabled={locked}>Sửa</TabsTrigger>
+              </TabsList>
+              <TabsContent value="preview">
+                <div className="max-h-[60vh] min-h-72 overflow-y-auto rounded-md border bg-muted/20 p-4">
+                  {draftOf(commentOf).comment.trim() ? (
+                    <Markdown content={draftOf(commentOf).comment} />
+                  ) : (
+                    <p className="text-sm text-muted-foreground">Chưa có nhận xét.</p>
+                  )}
+                </div>
+              </TabsContent>
+              <TabsContent value="edit">
+                <Textarea
+                  value={draftOf(commentOf).comment}
+                  disabled={locked}
+                  onChange={(e) => setDraft(commentOf.id, { comment: e.target.value })}
+                  className="min-h-72 text-sm leading-relaxed"
+                  placeholder="Nhận xét cho sinh viên… (hỗ trợ Markdown)"
+                />
+              </TabsContent>
+            </Tabs>
           )}
           <DialogFooter>
             <Button onClick={() => { if (commentOf && !locked) void commit(commentOf); setCommentOf(null); }}>

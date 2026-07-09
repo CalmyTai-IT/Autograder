@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { AlertTriangle, Sparkles } from "lucide-react";
 import type { GradeBreakdown, SubmissionStatus } from "@/types";
+import { Markdown } from "@/components/ui/markdown";
 
 export function SubmissionStatusBadge({
   status,
@@ -53,7 +54,9 @@ export function AiCommentBox({ comment }: { comment: string }) {
       <div className="mb-1.5 flex items-center gap-2 text-sm font-medium text-primary">
         <Sparkles className="size-4" /> Nhận xét từ AI
       </div>
-      <p className="text-sm leading-relaxed text-foreground/90">{comment}</p>
+      <div className="text-sm leading-relaxed text-foreground/90">
+        <Markdown content={comment} />
+      </div>
     </div>
   );
 }
